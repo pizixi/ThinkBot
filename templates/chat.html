@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="images/x-icon" href="/static/images/favicon.ico">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/static/css/github-dark-dimmed.min.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="/static/css/newstyle.css">
+  <link rel="stylesheet" href="/static/css/select2-4.0.13.min.css">
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"> -->
+  <title>ThinkBot</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="box col-xs-12">
+        <div class="title">
+          <h3 class="text-center"><span style="margin-right: 10px;"><i class="fa fa-wpexplorer"
+                aria-hidden="true"></i></span>ThinkBot</h3>
+
+        </div>
+
+        <div class="answer">
+          <div class="tips">
+            <h4 class="text-center">欢迎！更多功能请点击下方设置按钮</h4>
+            <!-- <img src="/static/images/reward.png"> -->
+          </div>
+          <div id="chatWindow"></div>
+          <div class="function">
+            <div class="others">
+              <div class="left"></div>
+              <div class="center">
+                <div class="stop common">
+                  <a class="icon-style stop-icon" title="停止响应" style="text-decoration: none;"><i
+                      class="fa fa-stop-circle-o fa-lg" aria-hidden="true"></i> 停止响应</a>
+                </div>
+              </div>
+              <div class="right"></div>
+            </div>
+            <div class="others">
+              <div class="left">
+                <div class="settings common dropup">
+                  <a class="dropdown-toggle icon-style" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false" title="设置">
+                    <i class="fa fa-cogs fa-lg" aria-hidden="true"></i>
+                  </a>
+                  <div class="dropdown-menu" style="padding:0;" onclick="event.stopPropagation()">
+                    <!-- 新增的导出和导入按钮 -->
+                    <div class="settings-common">
+                      <button id="exportBtn" class="btn btn-default"><i class="fa fa-download"></i>&nbsp; 导出</button>
+                      <button id="importBtn" class="btn btn-default"><i class="fa fa-upload"></i>&nbsp; 导入</button>
+                      <input type="file" id="fileInput" style="display: none;" />
+                      <!-- 新增的截图保存对话功能 -->
+                      <button id="screenshotBtn" class="btn btn-default screenshot"><i
+                          class="fa fa-file-image-o"></i>&nbsp;
+                        截图会话</button>
+
+                    </div>
+
+                    <div class="settings-common">
+                      <span><i class="fa fa fa-linode fa-lg" aria-hidden="true"></i>&nbsp; 主题</span>
+                      <select class="form-control ipt-common theme">
+                        <option value="light">light</option>
+                        <option value="gray">gray</option>
+                      </select>
+                    </div>
+                    <div class="settings-common">
+                      <span><i class="fa fa-server fa-lg" aria-hidden="true"></i>&nbsp; 模型服务商</span>
+                      <select class="form-control ipt-common service-provider" id="serviceProvider">
+                        <option value="OpenAI">OpenAI</option>
+                        <option value="Google">Google</option>
+                        <option value="Ali">阿里-通义千问</option>
+                      </select>
+                    </div>
+                    <div class="settings-common">
+                      <span><i class="fa fa-plug fa-lg" aria-hidden="true"></i>&nbsp; 接口地址</span>
+                      <input type="text" class="form-control ipt-common model-endpoint" id="modelEndpoint"
+                        placeholder="模型接口地址（不输入则使用各模型默认官方地址）">
+                    </div>
+                    <div class="settings-common">
+                      <span><i class="fa fa-key fa-lg" aria-hidden="true"></i>&nbsp; API Key</span>
+                      <input type="text" class="form-control ipt-common api-key" id="apiKey" placeholder="api key">
+                    </div>
+                    <div class="settings-common">
+                      <span><i class="fa fa-reddit-alien fa-lg" aria-hidden="true"></i>&nbsp; 支持模型</span>
+                      <select class="form-control ipt-common model" id="model" multiple="multiple"></select>
+                    </div>
+                    <!-- <div class="settings-common">
+                      <span><i class="fa fa-key fa-lg" aria-hidden="true"></i>&nbsp; OpenAI Key</span>
+                      <input type="text" class="form-control ipt-common api-key" placeholder="可用自己的api key">
+                    </div>
+                    <div class="settings-common">
+                      <span><i class="fa fa-reddit-alien fa-lg" aria-hidden="true"></i>&nbsp; OpenAI 模型</span>
+                      <select class="form-control ipt-common model">
+                        <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
+                        <option value="gpt-4">gpt-4</option>
+                        <option value="gpt-4-1106-preview">gpt-4-1106-preview</option>
+                      </select>
+                    </div> -->
+                    <div class="settings-common">
+                      <span><i class="fa fa-floppy-o fa-lg" aria-hidden="true"></i>&nbsp; 记录对话内容，刷新不会消失</span>
+                      <div class="chck-btn">
+                        <input id="chck-1" type="checkbox">
+                        <label for="chck-1" class="check-trail">
+                          <div class="check-handler"></div>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="settings-common">
+                      <span><i class="fa fa-retweet fa-lg" aria-hidden="true"></i>&nbsp; 开启连续对话，加倍消耗tokens</span>
+                      <div class="chck-btn">
+                        <input id="chck-2" type="checkbox">
+                        <label for="chck-2" class="check-trail">
+                          <div class="check-handler"></div>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- <div class="screenshot common">
+                  <a class="icon-style" title="截图保存对话"><i class="fa fa-file-image-o fa-lg" aria-hidden="true"></i></a>
+                </div> -->
+                <div class="delete common">
+                  <a class="icon-style" title="删除历史记录"><i class="fa fa-trash-o fa-lg" aria-hidden="true"></i></a>
+                </div>
+                <div class="custom-select">
+                  <!-- <span><i class="fa fa-reddit-alien fa-lg" aria-hidden="true"></i>&nbsp; OpenAI 模型</span> -->
+                  <!-- <select class="model">
+                    <option value="gpt-3.5-turbo">内置免费gpt-3.5</option>
+                    <option value="gpt-4">gpt-4</option>
+                    <option value="gpt-4-1106-preview">gpt-4-1106-preview</option>
+                  </select> -->
+                  <select id="singleModel">
+                    <!-- <option value="builtin">内置模型 - 默认服务商</option> -->
+                  </select>
+                </div>
+              </div>
+              <div class="center">
+                <!-- <div class="stop common">
+                  <a class="icon-style stop-icon" title="停止响应" style="text-decoration: none;"><i
+                      class="fa fa-stop-circle-o fa-lg" aria-hidden="true"></i> 停止</a>
+                </div> -->
+              </div>
+
+              <div class="right">
+                <!-- <div class="screenshot common">
+                  <a class="icon-style" title="截图保存对话"><i class="fa fa-file-image-o fa-lg" aria-hidden="true"></i></a>
+                </div> -->
+
+              </div>
+            </div>
+            <div class="ipt">
+              <div class="col-xs-12">
+                <textarea id="chatInput" class="form-control" rows="1"></textarea>
+              </div>
+              <!-- <button id="chatBtn" class="btn btn-primary" type="button">Go !</button> -->
+              <button id="chatBtn" class="btn btn-primary" type="button" style="border-radius: 50px;"><i
+                  class="fa fa-send-o" aria-hidden="true"></i></button>
+            </div>
+          </div>
+        </div>
+        <footer class="foot" style="margin-top: 5px;">
+          <p class="lead text-center" style="font-size: 13px;">“抢走工作的不会是AI,而是率先掌握AI能力的人”</p>
+          <!-- <p class="lead text-center">
+            <a href="https://blog.csdn.net/qq_57421630" target="_blank"><i class="fa fa-link fa-lg"
+                aria-hidden="true"></i>&nbsp; 联系我</a>
+            <a href="https://gitee.com/aniu-666/chat-gpt-website" target="_blank"><i class="fa fa-github fa-lg"
+                aria-hidden="true"></i>&nbsp; 项目地址</a>
+          </p> -->
+        </footer>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="/static/js/jquery-2.1.1.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/highlight.min.js"></script>
+<script src="/static/js/marked.min.js"></script>
+<script src="/static/js/html2canvas.min.js"></script>
+<script src="/static/js/custom.js"></script>
+<script src="/static/js/newcustom.js"></script>
+<script src="/static/js/jquery-3.6.0.js"></script>
+<script src="/static/js/select2-4.0.13.min.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script> -->
+
+</html>
