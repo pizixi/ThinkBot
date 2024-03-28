@@ -89,6 +89,8 @@ func chatHandler(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Google provider is not supported"})
 	case "ali":
 		relay.HandleAliDashscopeRequest(c, modelInfo, chatReq.Prompts)
+	case "copilot":
+		relay.HandleCopilotRequest(c, modelInfo, chatReq.Prompts)
 	default:
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Unknown provider"})
 	}

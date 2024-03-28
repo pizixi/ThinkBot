@@ -29,6 +29,10 @@ $(document).ready(function () {
 			{ id: 'qwen-max', text: 'qwen-max' },
 			{ id: 'qwen-max-1201', text: 'qwen-max-1201' },
 			{ id: 'qwen-max-longcontext', text: 'qwen-max-longcontext' },
+			{ id: 'Sydney', text: 'Sydney' },
+			{ id: 'Creative', text: 'Creative' },
+			{ id: 'Balanced', text: 'Balanced' },
+			{ id: 'Precise', text: 'Precise' },
 		];
 
 		var modelOptions = defaultModels.map(function (model) {
