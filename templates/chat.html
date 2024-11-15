@@ -36,10 +36,10 @@
             <div class="others">
               <div class="left"></div>
               <div class="center">
-                <div class="stop common">
-                  <a class="icon-style stop-icon" title="停止响应" style="text-decoration: none;"><i
-                      class="fa fa-stop-circle-o fa-lg" aria-hidden="true"></i> 停止响应</a>
-                </div>
+                <a class="stop-icon" title="停止响应">
+                  <i class="fa fa-stop-circle-o fa-lg"></i>
+                  停止响应
+                </a>
               </div>
               <div class="right"></div>
             </div>
@@ -73,10 +73,7 @@
                     <div class="settings-common">
                       <span><i class="fa fa-server fa-lg" aria-hidden="true"></i>&nbsp; 模型服务商</span>
                       <select class="form-control ipt-common service-provider" id="serviceProvider">
-                        <option value="OpenAI">OpenAI</option>
-                        <option value="Google">Google</option>
-                        <option value="Ali">阿里-通义千问</option>
-                        <option value="Copilot">微软-Copilot</option>
+                        <option value="OneHub">OneHub</option>
                       </select>
                     </div>
                     <div class="settings-common">
@@ -89,21 +86,13 @@
                       <input type="text" class="form-control ipt-common api-key" id="apiKey" placeholder="api key">
                     </div>
                     <div class="settings-common">
+                      <span><i class="fa fa-key fa-lg" aria-hidden="true"></i>&nbsp; OneHub Token</span>
+                      <input type="text" class="form-control ipt-common onehub-token" id="oneHubToken" placeholder="OneHub Token">
+                    </div>
+                    <div class="settings-common">
                       <span><i class="fa fa-reddit-alien fa-lg" aria-hidden="true"></i>&nbsp; 支持模型</span>
                       <select class="form-control ipt-common model" id="model" multiple="multiple"></select>
                     </div>
-                    <!-- <div class="settings-common">
-                      <span><i class="fa fa-key fa-lg" aria-hidden="true"></i>&nbsp; OpenAI Key</span>
-                      <input type="text" class="form-control ipt-common api-key" placeholder="可用自己的api key">
-                    </div>
-                    <div class="settings-common">
-                      <span><i class="fa fa-reddit-alien fa-lg" aria-hidden="true"></i>&nbsp; OpenAI 模型</span>
-                      <select class="form-control ipt-common model">
-                        <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
-                        <option value="gpt-4">gpt-4</option>
-                        <option value="gpt-4-1106-preview">gpt-4-1106-preview</option>
-                      </select>
-                    </div> -->
                     <div class="settings-common">
                       <span><i class="fa fa-floppy-o fa-lg" aria-hidden="true"></i>&nbsp; 记录对话内容，刷新不会消失</span>
                       <div class="chck-btn">

@@ -6,18 +6,17 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/gin-gonic/gin"
+	"github.com/labstack/echo/v4"
 	openai "github.com/sashabaranov/go-openai"
 )
 
 // HandleOpenAIRequest handles OpenAI requests
-func HandleOpenAIRequest(c *gin.Context, modelInfo map[string]string, promptsJSON string) {
+func HandleOpenAIRequest(c echo.Context, modelInfo map[string]string, promptsJSON string) error {
 	config := openai.DefaultConfig(modelInfo["apiKey"])
 	config.BaseURL = modelInfo["modelEndpoint"]
 	var prompts []openai.ChatCompletionMessage
 	if err := json.Unmarshal([]byte(promptsJSON), &prompts); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid prompts format"})
-		return
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid prompts format"})
 	}
 	ctx := context.Background()
 	client := openai.NewClientWithConfig(config)
@@ -30,27 +29,37 @@ func HandleOpenAIRequest(c *gin.Context, modelInfo map[string]string, promptsJSO
 	}
 	stream, err := client.CreateChatCompletionStream(ctx, req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create chat stream"})
-		return
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to create chat stream"})
 	}
 	defer stream.Close()
 
-	c.Writer.WriteHeader(http.StatusOK)
-	c.Writer.Header().Set("Content-Type", "application/octet-stream")
+	// 设置响应头以支持流式输出
+	res := c.Response()
+	res.Header().Set("Content-Type", "text/event-stream")
+	res.Header().Set("Cache-Control", "no-cache")
+	res.Header().Set("Connection", "keep-alive")
+	res.Header().Set("Transfer-Encoding", "chunked")
+
+	// 创建一个 Flusher
+	flusher, ok := res.Writer.(http.Flusher)
+	if !ok {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Streaming not supported"})
+	}
+
 	for {
-		response, err := stream.Recv()
+		streamResponse, err := stream.Recv()
 		if err == io.EOF {
 			break
 		}
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to receive chat stream"})
-			return
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to receive chat stream"})
 		}
-		_, err = c.Writer.WriteString(response.Choices[0].Delta.Content)
-		if err != nil {
-			c.Error(err) // 发送错误并中断请求
-			return
+
+		// 写入数据并立即刷新
+		if _, err = res.Writer.Write([]byte(streamResponse.Choices[0].Delta.Content)); err != nil {
+			return err
 		}
-		c.Writer.Flush()
+		flusher.Flush()
 	}
+	return nil
 }

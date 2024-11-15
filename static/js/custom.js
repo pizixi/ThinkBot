@@ -70,6 +70,7 @@ $(document).ready(function () {
 		);
 		chatWindow.append(responseMessageElement);
 		chatWindow.scrollTop(chatWindow.prop('scrollHeight'));
+		updateChatWindowHeight();
 	}
 
 	// 加载时添加请求消息到窗口
@@ -93,6 +94,7 @@ $(document).ready(function () {
 		);
 		chatWindow.append(requestMessageElement);
 		chatWindow.scrollTop(chatWindow.prop('scrollHeight'));
+		updateChatWindowHeight();
 	}
 
 	// 添加响应消息到窗口,流式响应此方法会执行多次
@@ -128,6 +130,7 @@ $(document).ready(function () {
 		// chatWindow.append(responseMessageElement);
 		lastResponseElement.append(escapedMessage);
 		chatWindow.scrollTop(chatWindow.prop('scrollHeight'));
+		updateChatWindowHeight();
 	}
 
 	// 加载时添加响应消息到窗口
@@ -173,6 +176,7 @@ $(document).ready(function () {
 		);
 		chatWindow.append(responseMessageElement);
 		chatWindow.scrollTop(chatWindow.prop('scrollHeight'));
+		updateChatWindowHeight();
 	}
 
 	// 删除消息的函数
@@ -330,6 +334,34 @@ $(document).ready(function () {
 	// 定义一个变量保存ajax请求对象
 	let ajaxRequest = null;
 
+	// 添加新的函数来更新聊天窗口高度
+	function updateChatWindowHeight() {
+		const functionHeight = $('.function').outerHeight();
+		const answerHeight = $('.answer').height();
+		const chatWindow = $('#chatWindow');
+		
+		// 设置聊天窗口高度，留出function区域的空间
+		chatWindow.css('height', `calc(100% - ${functionHeight}px)`);
+		
+		// 滚动到底部
+		chatWindow.scrollTop(chatWindow.prop('scrollHeight'));
+	}
+
+	// 修改textarea的自适应高度函数
+	function autoResizeTextarea() {
+		const textarea = $('#chatInput');
+		textarea.css('height', 'auto');
+		textarea.css('height', textarea.prop('scrollHeight') + 'px');
+		
+		// 更新聊天窗口高度
+		updateChatWindowHeight();
+	}
+
+	// 监听输入事件
+	chatInput.on('input', function() {
+		autoResizeTextarea();
+	});
+
 	// 处理用户输入
 	chatBtn.click(function () {
 		// 解绑键盘事件
@@ -447,20 +479,30 @@ $(document).ready(function () {
 				copy();
 			},
 		});
+
+		// 重置输入框高度
+		chatInput.css('height', '35px');
 	});
 
 	// 停止输出
-	$('.stop a').click(function () {
+	$('.stop-icon').click(function () {
 		if (ajaxRequest) {
 			ajaxRequest.abort();
+			$('.answer .others .center').css('display', 'none'); // 点击后隐藏停止按钮
 		}
 	});
 
 	// Enter键盘事件
 	function handleEnter(e) {
 		if (e.keyCode == 13) {
-			chatBtn.click();
-			e.preventDefault(); //避免回车换行
+			if (e.shiftKey) {
+				// Shift + Enter 换行
+				return true;
+			} else {
+				// 仅Enter发送消息
+				chatBtn.click();
+				e.preventDefault(); // 避免回车换行
+			}
 		}
 	}
 
@@ -691,4 +733,15 @@ $(document).ready(function () {
 			}, 2000);
 		});
 	}
+
+	// 页面加载完成后立即调整一次布局
+	$(document).ready(function() {
+		// ... existing code ...
+		
+		// 页面加载完成后立即调整布局
+		setTimeout(function() {
+			autoResizeTextarea();
+			updateChatWindowHeight();
+		}, 100);
+	});
 });

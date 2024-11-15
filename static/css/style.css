@@ -147,7 +147,9 @@ pre{
   padding: 0 15px;
   width: 100%;
   position: absolute;
-  bottom: 0px;
+  bottom: 0;
+  background-color: var(--bg-color);
+  z-index: 10;
 }
 .answer .others{
   display: flex;
@@ -155,7 +157,7 @@ pre{
   align-items: center;
   padding: 0 15px;
   height: 30px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .answer .others .left,.right{
@@ -164,25 +166,28 @@ pre{
 
 .answer .others .center{
   display: none;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  min-width: 90px;
+  height: 32px;
 }
 
 .answer .others .common{
-  width: 30px;
+  width: auto;
   height: 30px;
   display: flex;
+  align-items: center;
 }
 
 .answer .others .common .settings-common{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 15px;
-  background-color: #fff;
-  border-bottom: 1px solid #ddd;
+  padding: 8px 15px;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid rgba(97, 92, 237, 0.1);
 }
 
 .answer .others .common .settings-common:hover{
-  background-color: rgba(148,163,184,.2);
+  background-color: rgba(97, 92, 237, 0.05);
 }
 
 .answer .others .common .settings-common:last-child{
@@ -266,23 +271,33 @@ input[type="checkbox"]:checked + .check-trail .check-handler::before {
   content: "✔";
 }
 
-.answer .others .center .stop{
-  border: 1px solid rgba(241, 41, 11, 0.8);
-  border-radius: 5px;
-  opacity: .8;
-  width: 60px;
-  background-color: rgba(179, 46, 26, 0.1);
-  overflow: hidden;
+.answer .others .center .stop-icon {
+  color: #f43f5e;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 0 15px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  background-color: rgba(244, 63, 94, 0.1);
+  border: 1px solid rgba(244, 63, 94, 0.2);
+  border-radius: 16px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-decoration: none;
 }
 
-.answer .others .center .stop .stop-icon{
-  width: 100%;
-  color: red;
-  opacity: .8;
+.answer .others .center .stop-icon:hover {
+  background-color: rgba(244, 63, 94, 0.15);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(244, 63, 94, 0.15);
+  color: #f43f5e;
 }
 
-.answer .others .center .stop .stop-icon:hover{
-  background-color: rgb(214, 168, 168,.2);
+.answer .others .center .stop-icon i {
+  font-size: 15px;
 }
 
 .answer .others .right .screenshot{
@@ -290,38 +305,93 @@ input[type="checkbox"]:checked + .check-trail .check-handler::before {
 }
 
 .answer .others .icon-style{
-  width:30px;
+  width: auto;
   height: 30px;
   line-height: 30px;
   text-align: center;
-  /* color: #1ab394; */
-  /* color: rgb(97,92,237); */
-  color: #2b2a2a;
+  color: rgb(97, 92, 237);
   cursor: pointer;
-}
-
-.answer .others .icon-style:hover{
-  background-color: rgba(26, 179, 148,.1);
-}
-
-.answer .ipt{
-  display:flex;
+  padding: 0 10px;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  display: flex;
   align-items: center;
-  padding-right: 15px;
-  border-radius: 50px;
-  height: 50px;
-  /* border: 1px solid rgba(26, 179, 148, 0.8); */
-  /* border: 1px solid rgb(97,92,237); */
-  border: 1px solid lavender;
-  /* box-shadow: 0px 0px 10px 0px rgba(26, 179, 148, 0.2); */
-  box-shadow: lavender 0.08em 0.08em 0.16em;
+  gap: 5px;
+  background-color: rgba(97, 92, 237, 0.1);
+  border: 1px solid rgba(97, 92, 237, 0.2);
 }
+
+.answer .others .icon-style i {
+  font-size: 14px;
+}
+
+.answer .others .icon-style:hover {
+  background-color: rgba(97, 92, 237, 0.2);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(97, 92, 237, 0.1);
+}
+
+.answer .others .settings .dropdown-menu {
+  border-radius: 12px;
+  border: 1px solid rgba(97, 92, 237, 0.2);
+  box-shadow: 0 4px 12px rgba(97, 92, 237, 0.1);
+  padding: 8px 0;
+  margin-top: 5px;
+}
+
+.answer .others .common .settings-common {
+  padding: 8px 15px;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid rgba(97, 92, 237, 0.1);
+}
+
+.answer .others .common .settings-common:hover {
+  background-color: rgba(97, 92, 237, 0.05);
+}
+
+.answer .others .common .settings-common span {
+  color: rgb(97, 92, 237);
+  font-size: 14px;
+}
+
+.answer .others .delete .icon-style {
+  color: #ff6b6b;
+  background-color: rgba(255, 107, 107, 0.1);
+  border-color: rgba(255, 107, 107, 0.2);
+}
+
+.answer .others .delete .icon-style:hover {
+  background-color: rgba(255, 107, 107, 0.2);
+  box-shadow: 0 2px 4px rgba(255, 107, 107, 0.1);
+}
+
+.answer .ipt {
+  display: flex;
+  align-items: flex-end;
+  padding: 5px 15px 5px 5px;
+  border-radius: 50px;
+  min-height: 45px;
+  margin-bottom: 5px;
+  border: 1px solid lavender;
+  box-shadow: lavender 0.08em 0.08em 0.16em;
+  background-color: var(--bg-color);
+  position: relative;
+  z-index: 10;
+}
+
 .answer .ipt textarea {
   resize: none;
   overflow-y: auto;
   border: none;
-  box-shadow:none;
+  box-shadow: none;
+  min-height: 35px;
+  max-height: 200px;
+  padding: 8px 12px;
+  margin: 7px 0;
+  line-height: 1.5;
+  flex-grow: 1;
 }
+
 .answer .ipt textarea:focus{
   border: none !important;
   box-shadow: none !important;
@@ -329,9 +399,11 @@ input[type="checkbox"]:checked + .check-trail .check-handler::before {
 
 .answer #chatWindow {
   width: 100%;
-  max-height: calc(100% - 100px);
-  height:auto;
+  height: calc(100% - 150px);
+  max-height: none;
   overflow-y: auto;
+  margin-bottom: 0;
+  padding-bottom: 10px;
 }
 
 .message-bubble {
@@ -389,11 +461,12 @@ input[type="checkbox"]:checked + .check-trail .check-handler::before {
   color: rgb(97,92,237);
 }
 
-.answer #chatBtn{
-  /* background-color: #1ab394;
-  border-color: #1ab394; */
+.answer #chatBtn {
   background-color: rgb(97,92,237);
   border-color: rgb(97,92,237);
+  margin-left: 10px;
+  align-self: flex-end;
+  margin-bottom: 7px;
 }
 
 .answer #chatBtn:focus{
@@ -417,4 +490,288 @@ input[type="checkbox"]:checked + .check-trail .check-handler::before {
   /* color:#1ab394; */
   color:rgb(97,92,237);
   text-decoration:none;
+}
+
+/* 输入框滚动条样式 */
+.answer .ipt textarea::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.answer .ipt textarea::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 2px;
+}
+
+.answer .ipt textarea::-webkit-scrollbar-thumb {
+  background: rgba(97, 92, 237, 0.3);
+  border-radius: 2px;
+}
+
+.answer .ipt textarea::-webkit-scrollbar-thumb:hover {
+  background: rgba(97, 92, 237, 0.5);
+}
+
+.answer .ipt textarea::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* 美化Firefox滚动条 */
+.answer .ipt textarea {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(97, 92, 237, 0.3) transparent;
+}
+
+/* 美化左侧按钮组 */
+.answer .others .left {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* 增加按钮之间的间距 */
+}
+
+/* 设置按钮基础样式 */
+.answer .others .icon-style {
+  height: 32px;
+  padding: 0 15px;
+  border-radius: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+/* 设置按钮样式 */
+.answer .others .settings .icon-style {
+  color: #6366f1;
+  background-color: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.answer .others .settings .icon-style:hover {
+  background-color: rgba(99, 102, 241, 0.15);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(99, 102, 241, 0.15);
+}
+
+/* 删除按钮样式 */
+.answer .others .delete .icon-style {
+  color: #f43f5e;
+  background-color: rgba(244, 63, 94, 0.1);
+  border: 1px solid rgba(244, 63, 94, 0.2);
+}
+
+.answer .others .delete .icon-style:hover {
+  background-color: rgba(244, 63, 94, 0.15);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(244, 63, 94, 0.15);
+}
+
+/* 设置下拉菜单样式 */
+.answer .others .settings .dropdown-menu {
+  border-radius: 16px;
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 8px;
+  margin-top: 8px;
+  background: white;
+}
+
+.answer .others .common .settings-common {
+  padding: 10px 15px;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.answer .others .common .settings-common:last-child {
+  margin-bottom: 0;
+}
+
+.answer .others .common .settings-common:hover {
+  background-color: rgba(99, 102, 241, 0.08);
+}
+
+.answer .others .common .settings-common span {
+  color: #4b5563;
+  font-size: 13.5px;
+  font-weight: 500;
+}
+
+/* 美化图标 */
+.answer .others .icon-style i {
+  font-size: 15px;
+}
+
+/* 停止按钮样式 */
+.answer .others .center {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  min-width: 90px;
+  height: 32px;
+}
+
+.answer .others .center .stop-icon {
+  color: #f43f5e;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 0 15px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  background-color: rgba(244, 63, 94, 0.1);
+  border: 1px solid rgba(244, 63, 94, 0.2);
+  border-radius: 16px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.answer .others .center .stop-icon:hover {
+  background-color: rgba(244, 63, 94, 0.15);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(244, 63, 94, 0.15);
+  color: #f43f5e;
+}
+
+.answer .others .center .stop-icon i {
+  font-size: 15px;
+}
+
+/* 设置按钮组样式 */
+.settings-common .btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  margin-right: 8px;
+}
+
+.settings-common .btn:last-child {
+  margin-right: 0;
+}
+
+.settings-common .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* 左侧按钮组样式 */
+.answer .others .left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* 设置和删除按钮基础样式 */
+.answer .others .icon-style {
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: none;
+  background: transparent;
+}
+
+/* 设置按钮样式 */
+.answer .others .settings .icon-style {
+  color: #374151;
+  background: transparent;
+}
+
+.answer .others .settings .icon-style:hover {
+  background: rgba(0, 0, 0, 0.05);
+  transform: translateY(-1px);
+}
+
+.answer .others .settings .icon-style i {
+  font-size: 16px;
+  color: #374151;
+}
+
+/* 删除按钮样式 */
+.answer .others .delete .icon-style {
+  color: #dc2626;
+  background: transparent;
+}
+
+.answer .others .delete .icon-style:hover {
+  background: rgba(220, 38, 38, 0.05);
+  transform: translateY(-1px);
+}
+
+.answer .others .delete .icon-style i {
+  font-size: 16px;
+}
+
+/* 设置下拉菜单样式优化 */
+.answer .others .settings .dropdown-menu {
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  padding: 8px;
+  margin-top: 8px;
+  background: white;
+  min-width: 240px;
+}
+
+.answer .others .common .settings-common {
+  padding: 12px 16px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: none;
+}
+
+.answer .others .common .settings-common:hover {
+  background: #f9fafb;
+}
+
+.answer .others .common .settings-common span {
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* 设置按钮组内的按钮样式 */
+.settings-common .btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  margin-right: 8px;
+  border: 1px solid #e5e7eb;
+  background: white;
+  color: #374151;
+}
+
+.settings-common .btn:hover {
+  background: #f9fafb;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.settings-common .btn i {
+  margin-right: 4px;
+  font-size: 14px;
 }

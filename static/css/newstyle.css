@@ -106,15 +106,14 @@
 .custom-select {
     position: relative;
     display: inline-block;
-    max-width: 220px;
-    /* width: fit-content; */
+    width: auto;
+    min-width: 220px;
     height: 35px;
-    /* background-color: #f2f2f2; */
     background-color: inherit;
     border: 1px solid lavender;
     box-shadow: lavender 0.08em 0.08em 0.16em;
     border-radius: 50px;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .custom-select select {
@@ -127,12 +126,12 @@
     padding: 0 10px;
     font-size: 16px;
     color: #333;
-    /* colorgb(2, 1, 15)37); */
     text-shadow: #888888 0.08em 0.08em 0.16em;
     cursor: pointer;
     text-align: center;
-    -moz-appearance:none; /* Disables default styling for Firefox */
-    -webkit-appearance:none; /* Disables default styling for WebKit browsers */
+    white-space: nowrap;
+    -moz-appearance:none;
+    -webkit-appearance:none;
 }
 
 .custom-select::after {
@@ -159,4 +158,76 @@
 .select2-container--default .select2-selection--single,
 .select2-container--default .select2-selection--multiple {
   min-width: 100px;
+}
+
+/* 添加全选按钮样式 */
+.select-all-btn {
+  height: 35px;
+  background-color: inherit !important;
+  border: 1px solid lavender !important;
+  box-shadow: lavender 0.08em 0.08em 0.16em !important;
+  border-radius: 4px !important;
+  color: #2b2a2a !important;
+  text-shadow: #888888 0.08em 0.08em 0.16em !important;
+  font-size: 14px !important;
+  white-space: nowrap;
+}
+
+.select-all-btn:hover {
+  background-color: rgba(148,163,184,.2) !important;
+}
+
+/* 修改Select2容器样式 */
+.model-select-wrapper .select2-container {
+  flex: 1;
+  min-width: 0;
+}
+
+.model-select-wrapper .select2-container .select2-selection--multiple {
+  border: 1px solid lavender;
+  box-shadow: lavender 0.08em 0.08em 0.16em;
+  border-radius: 4px;
+  min-height: 35px;
+  background-color: inherit;
+}
+
+/* 全选按钮样式 */
+.select-all-btn {
+  height: 35px;
+  background-color: inherit !important;
+  border: 1px solid lavender !important;
+  box-shadow: lavender 0.08em 0.08em 0.16em !important;
+  border-radius: 4px !important;
+  color: #2b2a2a !important;
+  text-shadow: #888888 0.08em 0.08em 0.16em !important;
+  font-size: 14px !important;
+  white-space: nowrap;
+}
+
+.select-all-btn:hover {
+  background-color: rgba(148,163,184,.2) !important;
+}
+
+/* 调整Select2多选框内部选项样式 */
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+  background-color: rgba(148,163,184,.2);
+  border: 1px solid lavender;
+  border-radius: 4px;
+  margin: 2px;
+  padding: 2px 8px;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+  margin-right: 5px;
+}
+
+/* 调整下拉菜单样式 */
+.select2-container--default .select2-dropdown {
+  border: 1px solid lavender;
+  border-radius: 4px;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+  background-color: rgba(148,163,184,.2);
+  color: #2b2a2a;
 }

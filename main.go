@@ -4,13 +4,13 @@ import (
 	"ThinkBot/relay"
 	"embed"
 	"flag"
-	"html/template"
-	"io/fs"
+	"io"
 	"net/http"
 	"strconv"
 	"strings"
+	"text/template"
 
-	"github.com/gin-gonic/gin"
+	"github.com/labstack/echo/v4"
 	"github.com/tidwall/gjson"
 )
 
@@ -33,66 +33,39 @@ func main() {
 	flag.IntVar(&port, "port", 20093, "The port to run the server on.")
 	flag.Parse()
 
-	router := gin.Default()
+	// 创建 Echo 实例
+	e := echo.New()
 
 	// 静态文件不打包
-	// router.Static("/static", "static")
-	// router.LoadHTMLGlob("templates/*")
-	// router.GET("/", indexHandler)
+	e.Static("/static", "static")
+	// 设置模板渲染器
+	e.Renderer = newTemplateRenderer("templates/*")
 
-	// 将嵌入的文件系统转换为fs.FS
-	viewsFS := embedFolder(ViewsFS, "templates")
-	// 解析模板
-	tmpl := template.Must(template.New("").ParseFS(viewsFS, "*.html"))
-	// 使用解析后的模板
-	router.SetHTMLTemplate(tmpl)
-	// 使用embed打包静态资源
-	staticRootFS, _ := fs.Sub(StaticFS, "static")
-	// 设置静态资源路由
-	router.StaticFS("/static", http.FS(staticRootFS))
-	// 主页路由
-	router.GET("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "chat.html", nil)
-	})
+	// 路由设置
+	e.GET("/", indexHandler)
+	e.POST("/chat", chatHandler)
+	e.GET("/api/proxy/models", handleModelProxy)
 
-	// 聊天路由
-	router.POST("/chat", chatHandler)
-	router.Run(":" + strconv.Itoa(port))
+	// 启动服务器
+	e.Logger.Fatal(e.Start(":" + strconv.Itoa(port)))
 }
 
-func indexHandler(c *gin.Context) {
-	c.HTML(http.StatusOK, "chat.html", nil)
+func indexHandler(c echo.Context) error {
+	return c.Render(http.StatusOK, "chat.html", nil)
 }
 
-// 嵌入的文件系统需要转换为fs.FS（即io/fs中的FS接口）
-func embedFolder(efs embed.FS, path string) fs.FS {
-	fsys, err := fs.Sub(efs, path)
-	if err != nil {
-		panic(err) // 如果有错误，抛出异常
-	}
-	return fsys
-}
-func chatHandler(c *gin.Context) {
+func chatHandler(c echo.Context) error {
 	var chatReq ChatRequest
-	if err := c.ShouldBind(&chatReq); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request parameters"})
-		return
+	if err := c.Bind(&chatReq); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request parameters"})
 	}
 
 	modelInfo := parseModelInfo(chatReq.SelectedModelInfo)
 	switch strings.ToLower(modelInfo["provider"]) {
-	case "fucker":
-		// 内置
-	case "openai":
-		relay.HandleOpenAIRequest(c, modelInfo, chatReq.Prompts)
-	case "google":
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Google provider is not supported"})
-	case "ali":
-		relay.HandleAliDashscopeRequest(c, modelInfo, chatReq.Prompts)
-	case "copilot":
-		relay.HandleCopilotRequest(c, modelInfo, chatReq.Prompts)
+	case "onehub":
+		return relay.HandleOpenAIRequest(c, modelInfo, chatReq.Prompts)
 	default:
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Unknown provider"})
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Unknown provider"})
 	}
 }
 
@@ -102,5 +75,66 @@ func parseModelInfo(selectedModelInfo string) map[string]string {
 		"provider":      gjson.Get(selectedModelInfo, "provider").String(),
 		"modelEndpoint": gjson.Get(selectedModelInfo, "modelEndpoint").String(),
 		"apiKey":        gjson.Get(selectedModelInfo, "apiKey").String(),
+		"oneHubToken":   gjson.Get(selectedModelInfo, "oneHubToken").String(),
 	}
+}
+
+func handleModelProxy(c echo.Context) error {
+	endpoint := c.QueryParam("endpoint")
+	oneHubToken := c.QueryParam("oneHubToken")
+
+	if endpoint == "" {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "endpoint is required"})
+	}
+
+	if oneHubToken == "" {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "oneHubToken is required"})
+	}
+
+	// 构建目标URL
+	targetURL := strings.TrimSuffix(endpoint, "/v1") + "/api/user/models"
+
+	// 创建新的请求
+	req, err := http.NewRequest("GET", targetURL, nil)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to create request"})
+	}
+
+	// 添加认证头
+	req.Header.Set("Authorization", "Bearer "+oneHubToken)
+
+	// 发送请求
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to fetch models"})
+	}
+	defer resp.Body.Close()
+
+	// 读取响应
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to read response"})
+	}
+
+	// 设置响应头
+	c.Response().Header().Set("Content-Type", "application/json")
+
+	// 返回响应
+	return c.String(resp.StatusCode, string(body))
+}
+
+// 模板渲染器
+type templateRenderer struct {
+	templates *template.Template
+}
+
+func newTemplateRenderer(pattern string) *templateRenderer {
+	return &templateRenderer{
+		templates: template.Must(template.ParseGlob(pattern)),
+	}
+}
+
+func (t *templateRenderer) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
+	return t.templates.ExecuteTemplate(w, name, data)
 }
