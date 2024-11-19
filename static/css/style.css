@@ -806,3 +806,48 @@ input[type="checkbox"]:checked + .check-trail .check-handler::before {
   margin-right: 4px;
   font-size: 14px;
 }
+
+/* 自定义下拉框样式 */
+.custom-select {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  min-width: 180px;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.custom-select select {
+  width: 100%;
+  height: 36px;
+  background: transparent;
+  border: none !important;  /* 移除内层边框 */
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  outline: none !important;
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6366f1;
+  cursor: pointer;
+  text-align: center;
+}
+
+.custom-select:hover {
+  background: rgba(99, 102, 241, 0.15);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(99, 102, 241, 0.15);
+}
+
+/* 移除所有可能的内部边框和轮廓 */
+.custom-select select:focus,
+.custom-select select:active,
+.custom-select select:hover {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
