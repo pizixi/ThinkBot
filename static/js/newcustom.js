@@ -246,4 +246,22 @@ $(document).ready(function () {
 	var defaultProvider = $('#serviceProvider').val();
 	updateProviderSettings(defaultProvider); // 加载服务商设置
 	restoreSelectedModelInfo(); // 恢复选中的模型信息
+
+	// 添加新的事件监听器
+	$(document).ready(function() {
+		// 当点击模型选择框时触发
+		$('#model').on('select2:open', function() {
+			var modelEndpoint = $('#modelEndpoint').val();
+			var oneHubToken = $('#oneHubToken').val();
+			
+			if (modelEndpoint && oneHubToken) {
+				updateModelSelect([]);  // 传入空数组作为selectedModels
+			}
+		});
+
+		// 当modelEndpoint或oneHubToken值改变时也更新模型列表
+		$('#modelEndpoint, #oneHubToken').on('change', function() {
+			updateModelSelect([]);
+		});
+	});
 });

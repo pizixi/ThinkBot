@@ -729,6 +729,37 @@ input[type="checkbox"]:checked + .check-trail .check-handler::before {
   margin-top: 8px;
   background: white;
   min-width: 240px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.answer .others .settings .dropdown-menu::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.answer .others .settings .dropdown-menu::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 2px;
+}
+
+.answer .others .settings .dropdown-menu::-webkit-scrollbar-thumb {
+  background: rgba(97, 92, 237, 0.3);
+  border-radius: 2px;
+}
+
+.answer .others .settings .dropdown-menu::-webkit-scrollbar-thumb:hover {
+  background: rgba(97, 92, 237, 0.5);
+}
+
+.answer .others .settings .dropdown-menu::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* 美化Firefox滚动条 */
+.answer .others .settings .dropdown-menu {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(97, 92, 237, 0.3) transparent;
 }
 
 .answer .others .common .settings-common {
