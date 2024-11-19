@@ -60,6 +60,16 @@ func HandleOpenAIRequest(c echo.Context, modelInfo map[string]string, promptsJSO
 			return err
 		}
 		flusher.Flush()
+
+		// // 实现打字机效果
+		// for _, char := range streamResponse.Choices[0].Delta.Content {
+		// 	if _, err = res.Writer.Write([]byte(string(char))); err != nil {
+		// 		return err
+		// 	}
+		// 	flusher.Flush()
+		// 	// 可选：添加极小延迟以实现更明显的打字机效果
+		// 	// time.Sleep(time.Millisecond * 10)
+		// }
 	}
 	return nil
 }
