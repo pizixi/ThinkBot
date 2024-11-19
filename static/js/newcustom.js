@@ -161,7 +161,8 @@ $(document).ready(function () {
 					provider: provider,
 				});
 				$singleModelSelect.append(
-					new Option(modelId + '🏷️' + provider, modelValue)
+					// new Option(modelId + '🏷️' + provider, modelValue)
+					new Option('🏷️' + modelId, modelValue)
 				);
 			});
 		});
