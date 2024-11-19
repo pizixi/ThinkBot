@@ -407,45 +407,135 @@ input[type="checkbox"]:checked + .check-trail .check-handler::before {
 }
 
 .message-bubble {
-  padding: 5px;
-  margin: 10px;
+  padding: 12px;
+  margin: 8px 10px;
   display: flex;
   align-items: flex-start;
-  border-bottom: 1px dashed #e7eaec;
+  border-bottom: 1px solid rgba(229, 231, 235, 0.8);
+  transition: background-color 0.2s ease;
 }
 
-.message-bubble .message-text{
+.message-bubble:hover {
+  background-color: rgba(249, 250, 251, 0.8);
+}
+
+.message-bubble .message-text {
   width: auto;
   max-width: calc(100% - 45px);
-  font-size: 16px;
-  margin-left:15px;
+  font-size: 15px;
+  margin-left: 15px;
   word-break: break-all;
+  line-height: 1.6;
+  color: #374151;
 }
 
-.message-bubble .message-text p{
+.message-bubble .message-text pre {
+  margin: 12px 0;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+  background: #2b2a2a;
+  overflow-x: auto;
+}
+
+.message-bubble .response ol,
+.message-bubble .response ul {
+  padding-left: 1.5em;
+  margin: 8px 0;
+}
+
+.message-bubble .response li {
+  margin-bottom: 4px;
+}
+
+.message-bubble .message-text p {
+  margin-bottom: 8px;
   white-space: pre-wrap;
 }
 
-.message-bubble .response ol,ul{
-  padding-left: 2em;
+.message-bubble .message-text p.error {
+  color: #dc2626;
+  padding: 8px 12px;
+  background-color: rgba(220, 38, 38, 0.05);
+  border-radius: 6px;
+  border-left: 3px solid #dc2626;
+  margin: 8px 0;
 }
 
-/* 错误信息样式 */
-.message-bubble .message-text p.error{
-  color:red;
-  height:auto;
-  display: block;
-  white-space: normal;
-  word-break: break-all;
+.message-bubble .message-text a {
+  color: #6366f1;
+  text-decoration: none;
+  border-bottom: 1px dashed #6366f1;
+  transition: all 0.2s ease;
+}
+
+.message-bubble .message-text a:hover {
+  color: #4f46e5;
+  border-bottom-style: solid;
+}
+
+.message-bubble .message-text blockquote {
+  border-left: 3px solid #6366f1;
+  margin: 10px 0;
+  padding: 8px 16px;
+  background-color: rgba(99, 102, 241, 0.05);
+  border-radius: 4px;
+  font-style: italic;
+  color: #4b5563;
+}
+
+.message-bubble .message-text table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  margin: 12px 0;
+  font-size: 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.message-bubble .message-text th,
+.message-bubble .message-text td {
+  border: 1px solid #e5e7eb;
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.message-bubble .message-text tr:not(:last-child) td,
+.message-bubble .message-text tr:not(:last-child) th {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.message-bubble .message-text td:not(:last-child),
+.message-bubble .message-text th:not(:last-child) {
+  border-right: 1px solid #e5e7eb;
+}
+
+.message-bubble .message-text th {
+  background-color: #f9fafb;
+  font-weight: 600;
+  border-bottom: 2px solid #e5e7eb;
+  color: #374151;
+}
+
+.message-bubble .message-text tbody tr:hover {
+  background-color: rgba(99, 102, 241, 0.05);
+}
+
+.message-bubble .message-text tbody tr:nth-child(even) {
+  background-color: #f9fafb;
 }
 
 .message-bubble .chat-icon {
-  width: 30px;
-  height: 30px;
-  border-radius: 3px;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .message-bubble .request-icon{
@@ -850,4 +940,77 @@ input[type="checkbox"]:checked + .check-trail .check-handler::before {
   border: none !important;
   outline: none !important;
   box-shadow: none !important;
+}
+
+/* Markdown 标题基础样式 */
+.message-bubble .message-text h1,
+.message-bubble .message-text h2,
+.message-bubble .message-text h3,
+.message-bubble .message-text h4,
+.message-bubble .message-text h5,
+.message-bubble .message-text h6 {
+  margin: 1.8em 0 0.8em;
+  line-height: 1.4;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+/* 一级标题 */
+.message-bubble .message-text h1 {
+  font-size: 1.8em;
+  padding-bottom: 0.4em;
+  border-bottom: 2px solid #e2e8f0;
+  color: #1a202c;
+}
+
+/* 二级标题 */
+.message-bubble .message-text h2 {
+  font-size: 1.5em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid #e2e8f0;
+  color: #2d3748;
+}
+
+/* 三级标题 */
+.message-bubble .message-text h3 {
+  font-size: 1.3em;
+  color: #4a5568;
+}
+
+/* 四级标题 */
+.message-bubble .message-text h4 {
+  font-size: 1.15em;
+  color: #4a5568;
+}
+
+/* 五级标题 */
+.message-bubble .message-text h5 {
+  font-size: 1.05em;
+  color: #4a5568;
+}
+
+/* 六级标题 */
+.message-bubble .message-text h6 {
+  font-size: 1em;
+  color: #4a5568;
+}
+
+/* 标题悬停效果 */
+.message-bubble .message-text h1:hover,
+.message-bubble .message-text h2:hover,
+.message-bubble .message-text h3:hover,
+.message-bubble .message-text h4:hover,
+.message-bubble .message-text h5:hover,
+.message-bubble .message-text h6:hover {
+  color: rgb(97, 92, 237);
+}
+
+/* 标题与内容的间距 */
+.message-bubble .message-text h1 + p,
+.message-bubble .message-text h2 + p,
+.message-bubble .message-text h3 + p,
+.message-bubble .message-text h4 + p,
+.message-bubble .message-text h5 + p,
+.message-bubble .message-text h6 + p {
+  margin-top: 1em;
 }
